@@ -4,7 +4,7 @@
     {
         public void Configure(EntityTypeBuilder<OrderItem> builder)
         {
-            builder.ToTable(nameof(Order), "dbo");
+            builder.ToTable(nameof(OrderItem), "dbo");
             builder.HasKey(p => p.Id);
 
             builder.Property(p => p.Id).UseIdentityColumn(1, 1).ValueGeneratedOnAdd().IsRequired();
