@@ -18,7 +18,7 @@
                 navigationBuilder.Property(p => p.District).HasMaxLength(50).IsUnicode(false);
             });
 
-            builder.HasMany(p => p.OrderItems).WithOne(p => p.Order).HasForeignKey(p => p.OrderId).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(p => p.Items).WithOne(p => p.Order).HasForeignKey(p => p.OrderId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
