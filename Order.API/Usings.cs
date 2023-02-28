@@ -1,4 +1,5 @@
-﻿global using Microsoft.EntityFrameworkCore;
+﻿global using MassTransit;
+global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using OrderService.API.Infrastructure.Data.Context;
 global using OrderService.API.Infrastructure.Data.Entities;
