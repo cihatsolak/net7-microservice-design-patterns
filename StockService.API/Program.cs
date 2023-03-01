@@ -12,6 +12,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddMassTransit(busRegistrationConfigurator =>
 {
     busRegistrationConfigurator.AddConsumer<OrderCreatedEventConsumer>();
+    busRegistrationConfigurator.AddConsumer<PaymentFailedEventConsumer>();
 
     busRegistrationConfigurator.UsingRabbitMq((busRegistrationContext, rabbitMqBusFactoryConfigurator) =>
     {
@@ -24,6 +25,11 @@ builder.Services.AddMassTransit(busRegistrationConfigurator =>
         rabbitMqBusFactoryConfigurator.ReceiveEndpoint(RabbitQueueName.StockOrderCreatedEventQueueName, endpoint =>
         {
             endpoint.ConfigureConsumer<OrderCreatedEventConsumer>(busRegistrationContext);
+        });
+
+        rabbitMqBusFactoryConfigurator.ReceiveEndpoint(RabbitQueueName.StockPaymentFailedEventQueueName, endpoint =>
+        {
+            endpoint.ConfigureConsumer<PaymentFailedEventConsumer>(busRegistrationContext);
         });
     });
 });
