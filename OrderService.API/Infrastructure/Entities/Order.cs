@@ -11,6 +11,7 @@
         public string BuyerId { get; set; }
         public DateTime CreatedDate { get; set; }
         public OrderStatus Status { get; set; }
+        public string FailMessage { get; set; }
         public Address Address { get; set; }
 
         public List<OrderItem> Items { get; set; }
