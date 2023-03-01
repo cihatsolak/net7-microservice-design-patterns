@@ -13,6 +13,7 @@ builder.Services.AddMassTransit(busRegistrationConfigurator =>
 {
     busRegistrationConfigurator.AddConsumer<PaymentCompletedEventConsumer>();
     busRegistrationConfigurator.AddConsumer<PaymentFailedEventConsumer>();
+    busRegistrationConfigurator.AddConsumer<StockNotReservedEventConsumer>();
 
     busRegistrationConfigurator.UsingRabbitMq((busRegistrationContext, rabbitMqBusFactoryConfigurator) =>
     {
@@ -30,6 +31,11 @@ builder.Services.AddMassTransit(busRegistrationConfigurator =>
         rabbitMqBusFactoryConfigurator.ReceiveEndpoint(RabbitQueueName.OrderPaymentFailedEventQueueName, endpoint =>
         {
             endpoint.ConfigureConsumer<PaymentFailedEventConsumer>(busRegistrationContext);
+        });
+
+        rabbitMqBusFactoryConfigurator.ReceiveEndpoint(RabbitQueueName.OrderStockNotReservedEventQueueName, endpoint =>
+        {
+            endpoint.ConfigureConsumer<StockNotReservedEventConsumer>(busRegistrationContext);
         });
     });
 });
