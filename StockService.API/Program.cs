@@ -8,7 +8,21 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseInMemoryDatabase("StockDb");
 });
 
+builder.Services.AddMassTransit(busRegistrationConfigurator =>
+{
+    busRegistrationConfigurator.UsingRabbitMq((busRegistrationContext, rabbitMqBusFactoryConfigurator) =>
+    {
+        rabbitMqBusFactoryConfigurator.Host(builder.Configuration["RabbitMqSetting:HostAddress"], "/", hostConfigurator =>
+        {
+            hostConfigurator.Username(builder.Configuration["RabbitMqSetting:Username"]);
+            hostConfigurator.Password(builder.Configuration["RabbitMqSetting:Password"]);
+        });
+    });
+});
+
 var app = builder.Build();
+
+await AppDbContextSeed.ExecuteAsync(app);
 
 if (app.Environment.IsDevelopment())
 {
@@ -18,4 +32,4 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.Run();
+await app.RunAsync();

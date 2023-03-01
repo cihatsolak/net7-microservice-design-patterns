@@ -10,5 +10,7 @@
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
+
+        public DbSet<Stock> Stocks { get; set; }
     }
 }
