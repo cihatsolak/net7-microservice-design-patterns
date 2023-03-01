@@ -3,7 +3,7 @@
     public enum OrderStatus
     {
         Suspend,
-        Success,
+        Completed,
         Fail
     }
 }

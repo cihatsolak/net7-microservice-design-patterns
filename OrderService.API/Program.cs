@@ -11,12 +11,19 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddMassTransit(busRegistrationConfigurator =>
 {
+    busRegistrationConfigurator.AddConsumer<PaymentCompletedEventConsumer>();
+
     busRegistrationConfigurator.UsingRabbitMq((busRegistrationContext, rabbitMqBusFactoryConfigurator) =>
     {
         rabbitMqBusFactoryConfigurator.Host(builder.Configuration["RabbitMqSetting:HostAddress"], "/", hostConfigurator =>
         {
             hostConfigurator.Username(builder.Configuration["RabbitMqSetting:Username"]);
             hostConfigurator.Password(builder.Configuration["RabbitMqSetting:Password"]);
+        });
+
+        rabbitMqBusFactoryConfigurator.ReceiveEndpoint(RabbitQueueName.OrderPaymentCompletedEventQueueName, endpoint =>
+        {
+            endpoint.ConfigureConsumer<PaymentCompletedEventConsumer>(busRegistrationContext);
         });
     });
 });
