@@ -2,8 +2,8 @@
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
-global using OrderService.API.Infrastructure.Data.Context;
-global using OrderService.API.Infrastructure.Data.Entities;
+global using OrderService.API.Infrastructure.Context;
+global using OrderService.API.Infrastructure.Entities;
 global using OrderService.API.Infrastructure.Enums;
 global using OrderService.API.Models;
 global using Shared;

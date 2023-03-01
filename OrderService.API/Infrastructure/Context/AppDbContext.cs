@@ -1,4 +1,4 @@
-﻿namespace OrderService.API.Infrastructure.Data.Context
+﻿namespace OrderService.API.Infrastructure.Context
 {
     public class AppDbContext : DbContext
     {

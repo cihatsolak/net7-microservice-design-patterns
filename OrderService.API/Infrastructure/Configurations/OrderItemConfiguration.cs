@@ -1,4 +1,4 @@
-﻿namespace OrderService.API.Infrastructure.Data.Configurations
+﻿namespace OrderService.API.Infrastructure.Configurations
 {
     public class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
     {

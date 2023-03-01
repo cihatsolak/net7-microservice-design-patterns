@@ -21,9 +21,7 @@ builder.Services.AddMassTransit(busRegistrationConfigurator =>
 });
 
 
-
 var app = builder.Build();
-
 
 if (app.Environment.IsDevelopment())
 {

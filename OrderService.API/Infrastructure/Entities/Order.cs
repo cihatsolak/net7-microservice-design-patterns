@@ -1,4 +1,4 @@
-﻿namespace OrderService.API.Infrastructure.Data.Entities
+﻿namespace OrderService.API.Infrastructure.Entities
 {
     public class Order
     {
