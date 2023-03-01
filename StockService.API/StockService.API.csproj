@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>diasble</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
