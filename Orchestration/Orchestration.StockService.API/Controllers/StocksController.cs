@@ -1,4 +1,4 @@
-﻿namespace StockService.API.Controllers
+﻿namespace Orchestration.StockService.API.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]

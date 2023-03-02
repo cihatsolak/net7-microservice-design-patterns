@@ -1,4 +1,4 @@
-﻿namespace PaymentService.API.Consumers
+﻿namespace Choreography.PaymentService.API.Consumers
 {
     public class StockReservedEventConsumer : IConsumer<StockReservedEvent>
     {

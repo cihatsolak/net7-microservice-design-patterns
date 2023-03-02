@@ -1,4 +1,4 @@
-﻿namespace StockService.API.Controllers
+﻿namespace Choreography.StockService.API.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]

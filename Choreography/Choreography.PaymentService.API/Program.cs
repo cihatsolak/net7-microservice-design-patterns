@@ -1,3 +1,5 @@
+using Choreography.PaymentService.API.Consumers;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();

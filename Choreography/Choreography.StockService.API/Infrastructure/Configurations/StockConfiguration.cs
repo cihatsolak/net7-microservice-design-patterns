@@ -1,4 +1,4 @@
-﻿namespace StockService.API.Infrastructure.Configurations
+﻿namespace Choreography.StockService.API.Infrastructure.Configurations
 {
     public class StockConfiguration : IEntityTypeConfiguration<Stock>
     {

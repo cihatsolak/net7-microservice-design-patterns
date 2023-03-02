@@ -1,4 +1,4 @@
-﻿namespace StockService.API.Infrastructure.Entities
+﻿namespace Orchestration.StockService.API.Infrastructure.Entities
 {
     public class Stock
     {

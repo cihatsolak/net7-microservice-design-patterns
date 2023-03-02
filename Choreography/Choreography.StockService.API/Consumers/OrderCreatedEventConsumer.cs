@@ -1,4 +1,4 @@
-﻿namespace StockService.API.Consumers
+﻿namespace Choreography.StockService.API.Consumers
 {
     public class OrderCreatedEventConsumer : IConsumer<OrderCreatedEvent>
     {
@@ -40,7 +40,7 @@
             foreach (var orderItem in context.Message.OrderItems)
             {
                 var stock = await _context.Stocks.FirstOrDefaultAsync(x => x.ProductId == orderItem.ProductId);
-                
+
                 stock.Count -= orderItem.Count;
 
                 await _context.SaveChangesAsync();

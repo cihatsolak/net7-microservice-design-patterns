@@ -1,4 +1,4 @@
-﻿namespace StockService.API.Infrastructure.Context
+﻿namespace Orchestration.StockService.API.Infrastructure.Context
 {
     public class AppDbContext : DbContext
     {

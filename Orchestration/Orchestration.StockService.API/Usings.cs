@@ -2,9 +2,6 @@
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
-global using Shared;
-global using Shared.Infrastructure;
-global using StockService.API.Consumers;
-global using StockService.API.Infrastructure.Context;
-global using StockService.API.Infrastructure.Entities;
+global using Orchestration.StockService.API.Infrastructure.Context;
+global using Orchestration.StockService.API.Infrastructure.Entities;
 global using System.Reflection;

@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Choreography.OrderService.A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Choreography.PaymentService.API", "Choreography\Choreography.PaymentService.API\Choreography.PaymentService.API.csproj", "{26CD4716-09C4-4A3F-9632-A0B0067EEA9F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Choreography\Choreography.Shared\Shared.csproj", "{0BB6708F-CD25-4F43-9B06-88A766AA29F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{0BB6708F-CD25-4F43-9B06-88A766AA29F6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Choreography.StockService.API", "Choreography\Choreography.StockService.API\Choreography.StockService.API.csproj", "{DDD94224-60BC-443E-9C8D-560888C3BA1A}"
 EndProject

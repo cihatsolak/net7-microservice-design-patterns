@@ -21,7 +21,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Choreography.Shared\Choreography.Shared.csproj" />
+	  <Folder Include="Consumers\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Shared\Shared.csproj" />
 	</ItemGroup>
 
 </Project>
