@@ -16,7 +16,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Choreography.Shared\Choreography.Shared.csproj" />
+	  <ProjectReference Include="..\Choreography.Shared\Shared.csproj" />
 	</ItemGroup>
 
 </Project>

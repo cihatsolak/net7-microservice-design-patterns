@@ -1,4 +1,4 @@
-﻿namespace OrderService.API.Infrastructure.Configurations
+﻿namespace Choreography.OrderService.API.Infrastructure.Configurations
 {
     public class OrderConfiguration : IEntityTypeConfiguration<Order>
     {
