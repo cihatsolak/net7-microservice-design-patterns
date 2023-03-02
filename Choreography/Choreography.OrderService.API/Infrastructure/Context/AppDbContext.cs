@@ -1,4 +1,4 @@
-﻿namespace OrderService.API.Infrastructure.Context
+﻿namespace Choreography.OrderService.API.Infrastructure.Context
 {
     public class AppDbContext : DbContext
     {

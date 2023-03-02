@@ -1,4 +1,4 @@
-﻿namespace OrderService.API.Controllers
+﻿namespace Choreography.OrderService.API.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -8,7 +8,7 @@
         private readonly IPublishEndpoint _publishEndpoint;
 
         public OrdersController(
-            AppDbContext context, 
+            AppDbContext context,
             IPublishEndpoint publishEndpoint)
         {
             _context = context;

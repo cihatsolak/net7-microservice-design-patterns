@@ -1,4 +1,4 @@
-﻿namespace OrderService.API.Models
+﻿namespace Choreography.OrderService.API.Models
 {
     public class AddressRequest
     {

@@ -1,4 +1,4 @@
-﻿namespace OrderService.API.Consumers
+﻿namespace Choreography.OrderService.API.Consumers
 {
     public class PaymentFailedEventConsumer : IConsumer<PaymentFailedEvent>
     {

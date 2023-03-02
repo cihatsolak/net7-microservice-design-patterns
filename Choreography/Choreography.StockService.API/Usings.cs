@@ -1,10 +1,9 @@
-﻿global using MassTransit;
+﻿global using Choreography.StockService.API.Consumers;
+global using Choreography.StockService.API.Infrastructure.Context;
+global using Choreography.StockService.API.Infrastructure.Entities;
+global using MassTransit;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
-global using Shared;
-global using Shared.Infrastructure;
-global using StockService.API.Consumers;
-global using StockService.API.Infrastructure.Context;
-global using StockService.API.Infrastructure.Entities;
+global using Shared.Choreography;
 global using System.Reflection;

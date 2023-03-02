@@ -1,4 +1,4 @@
-﻿namespace StockService.API.Consumers
+﻿namespace Choreography.StockService.API.Consumers
 {
     public class PaymentFailedEventConsumer : IConsumer<PaymentFailedEvent>
     {
@@ -6,7 +6,7 @@
         private readonly ILogger<PaymentFailedEventConsumer> _logger;
 
         public PaymentFailedEventConsumer(
-            AppDbContext context, 
+            AppDbContext context,
             ILogger<PaymentFailedEventConsumer> logger)
         {
             _context = context;

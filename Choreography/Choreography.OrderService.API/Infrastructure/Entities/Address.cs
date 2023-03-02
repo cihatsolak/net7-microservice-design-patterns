@@ -1,4 +1,4 @@
-﻿namespace OrderService.API.Infrastructure.Entities
+﻿namespace Choreography.OrderService.API.Infrastructure.Entities
 {
     public class Address
     {

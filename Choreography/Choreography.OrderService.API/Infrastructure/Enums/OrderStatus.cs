@@ -1,4 +1,4 @@
-﻿namespace OrderService.API.Infrastructure.Enums
+﻿namespace Choreography.OrderService.API.Infrastructure.Enums
 {
     public enum OrderStatus
     {

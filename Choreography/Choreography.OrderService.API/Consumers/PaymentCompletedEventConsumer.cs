@@ -1,4 +1,4 @@
-﻿namespace OrderService.API.Consumers
+﻿namespace Choreography.OrderService.API.Consumers
 {
     public class PaymentCompletedEventConsumer : IConsumer<PaymentCompletedEvent>
     {
@@ -6,7 +6,7 @@
         private readonly ILogger<PaymentCompletedEventConsumer> _logger;
 
         public PaymentCompletedEventConsumer(
-            AppDbContext context, 
+            AppDbContext context,
             ILogger<PaymentCompletedEventConsumer> logger)
         {
             _context = context;
