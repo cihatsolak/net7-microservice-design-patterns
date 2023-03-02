@@ -8,7 +8,6 @@ global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Shared.Choreography;
-global using Shared.Choreography.Infrastructure;
 global using Shared.Choreography.Models;
 global using System.ComponentModel.DataAnnotations.Schema;
 global using System.Reflection;

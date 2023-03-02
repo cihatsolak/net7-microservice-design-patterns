@@ -6,5 +6,4 @@ global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Shared.Choreography;
-global using Shared.Choreography.Infrastructure;
 global using System.Reflection;
