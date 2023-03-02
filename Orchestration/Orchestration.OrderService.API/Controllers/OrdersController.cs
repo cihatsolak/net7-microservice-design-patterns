@@ -5,14 +5,14 @@
     public class OrdersController : ControllerBase
     {
         private readonly AppDbContext _context;
-        private readonly IPublishEndpoint _publishEndpoint;
+        private readonly ISendEndpointProvider _sendEndpointProvider;
 
         public OrdersController(
             AppDbContext context,
-            IPublishEndpoint publishEndpoint)
+            ISendEndpointProvider sendEndpointProvider)
         {
             _context = context;
-            _publishEndpoint = publishEndpoint;
+            _sendEndpointProvider = sendEndpointProvider;
         }
 
         [HttpPost]
@@ -20,7 +20,7 @@
         {
             var order = await AddOrderAsync(request);
 
-            OrderCreatedEvent orderCreatedEvent = new()
+            OrderCreatedRequestEvent orderCreatedRequestEvent = new()
             {
                 BuyerId = request.BuyerId,
                 OrderId = order.Id,
@@ -36,14 +36,15 @@
 
             request.OrderItems.ForEach(item =>
             {
-                orderCreatedEvent.OrderItems.Add(new OrderItemMessage
+                orderCreatedRequestEvent.OrderItems.Add(new OrderItemMessage
                 {
                     Count = item.Count,
                     ProductId = item.ProductId
                 });
             });
 
-            await _publishEndpoint.Publish(orderCreatedEvent);
+            var sendEndpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{RabbitQueueName.OrderSaga}"));
+            await sendEndpoint.Send<IOrderCreatedRequestEvent>(orderCreatedRequestEvent);
 
             return Ok();
         }

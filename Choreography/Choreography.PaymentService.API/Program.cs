@@ -1,4 +1,4 @@
-using Choreography.PaymentService.API.Consumers;
+using Shared.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 

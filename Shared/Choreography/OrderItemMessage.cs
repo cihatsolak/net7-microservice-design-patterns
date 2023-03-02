@@ -1,4 +1,4 @@
-﻿namespace Shared
+﻿namespace Shared.Choreography
 {
     public class OrderItemMessage
     {

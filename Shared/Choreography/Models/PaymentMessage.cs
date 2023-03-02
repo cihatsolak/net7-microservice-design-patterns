@@ -1,4 +1,4 @@
-﻿namespace Shared.Models
+﻿namespace Shared.Choreography.Models
 {
     public class PaymentMessage
     {

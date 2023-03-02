@@ -1,4 +1,4 @@
-﻿namespace Shared
+﻿namespace Shared.Choreography
 {
     /// <summary>
     /// Stok işlemi başarısız olduğunda

@@ -1,4 +1,6 @@
-﻿namespace Choreography.StockService.API.Consumers
+﻿using Shared.Infrastructure;
+
+namespace Choreography.StockService.API.Consumers
 {
     public class OrderCreatedEventConsumer : IConsumer<OrderCreatedEvent>
     {
