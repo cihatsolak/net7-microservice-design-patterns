@@ -1,6 +1,4 @@
-﻿using Shared.Infrastructure;
-
-namespace Choreography.StockService.API.Consumers
+﻿namespace Choreography.StockService.API.Consumers
 {
     public class OrderCreatedEventConsumer : IConsumer<OrderCreatedEvent>
     {

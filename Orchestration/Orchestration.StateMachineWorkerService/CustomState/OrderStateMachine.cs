@@ -44,7 +44,7 @@
                 {
                     Console.WriteLine($"OrderCreatedRequestEvent before : {context.Saga}");
                 })
-                .Publish(context => new OrchestrationOrderCreatedEvent
+                .Publish(context => new OrchestrationOrderCreatedEvent(context.CorrelationId.Value)
                 {
                     OrderItems = context.Message.OrderItems
                 }) // Publish ya da Send kullanılabilir.

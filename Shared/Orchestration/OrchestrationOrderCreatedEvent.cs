@@ -10,6 +10,13 @@
 
     public class OrchestrationOrderCreatedEvent : IOrchestrationOrderCreatedEvent
     {
+        public OrchestrationOrderCreatedEvent(Guid correlationId)
+        {
+            CorrelationId = correlationId;
+        }
+
+        public Guid CorrelationId { get; init; }
+
         public List<OrderItemMessage> OrderItems { get; set; }
     }
 }
