@@ -6,7 +6,7 @@ global using Microsoft.EntityFrameworkCore.Metadata.Internal;
 global using Orchestration.StateMachineWorkerService;
 global using Orchestration.StateMachineWorkerService.CustomState;
 global using Orchestration.StateMachineWorkerService.Data;
-global using Shared.Choreography;
+global using Shared.Choreography.Models;
 global using Shared.Infrastructure;
 global using Shared.Orchestration;
 global using System.ComponentModel.DataAnnotations.Schema;

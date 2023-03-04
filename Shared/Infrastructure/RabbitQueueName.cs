@@ -10,5 +10,6 @@
         public const string OrderStockNotReservedEventQueueName = "order-stock-not-reserved-queue";
 
         public const string OrderSaga = "order-saga-queue";
+        public const string PaymentStockReservedRequestQueueName = "payment-stock-reserved-request-queue";
     }
 }

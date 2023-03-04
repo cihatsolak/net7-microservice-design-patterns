@@ -7,7 +7,10 @@
     public class OrderStateMachine : MassTransitStateMachine<OrderStateInstance>
     {
         public Event<IOrderCreatedRequestEvent> OrderCreatedRequestEvent { get; set; }
+        public Event<IOrchestrationStockReservedEvent> StockReservedEvent { get; set; }
+      
         public State OrderCreated { get; set; }
+        public State StockReserved { get; set; }
 
         public OrderStateMachine()
         {
@@ -49,13 +52,36 @@
                     OrderItems = context.Message.OrderItems
                 }) // Publish ya da Send kullanılabilir.
                 .TransitionTo(OrderCreated) //yukarıdaki Then blokları (business kodlar) işlendikten sonra inital state'inde order created evresine geçmesi için
-                
                 .Then(context =>
                 {
                     Console.WriteLine($"OrderCreatedRequestEvent After : {context.Saga}");
                 }));
-
             });
+
+            //OrderCreated state'indeyken, OrderCreated evresindeyken
+            During(OrderCreated,
+                When(StockReservedEvent)
+                .TransitionTo(StockReserved)
+                .Send(new Uri($"queue:{RabbitQueueName.PaymentStockReservedRequestQueueName}"), context => new OrchestrationStockReservedRequestPayment(context.Message.CorrelationId)
+                {
+                    //context.Message: StockReservedEvent'i tesmil eder
+                    //context.Saga : Veri tabanını temsil eder.
+
+                    OrderItems = context.Message.OrderItems, //context.Message: StockReservedEvent'i tesmil eder
+                    Payment = new PaymentMessage
+                    {
+                        CardName = context.Saga.CardName, //context.Saga : Veri tabanını temsil eder.
+                        CardNumber = context.Saga.CardNumber,
+                        CVV = context.Saga.CVV,
+                        Expiration = context.Saga.Expiration,
+                        TotalPrice = context.Saga.TotalPrice
+                    }
+                })
+                .Then(context =>
+                {
+                    Console.WriteLine($"StockReservedEvent After : {context.Saga}");
+                })
+            ); 
         }
     }
 }
