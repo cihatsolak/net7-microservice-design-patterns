@@ -9,7 +9,5 @@ global using Orchestration.OrderService.API.Models;
 global using Shared.Choreography;
 global using Shared.Choreography.Models;
 global using Shared.Infrastructure;
-global using Shared.Orchestration.Events;
-global using Shared.Orchestration.Interfaces;
 global using System.ComponentModel.DataAnnotations.Schema;
 global using System.Reflection;

@@ -4,4 +4,5 @@ global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Orchestration.StockService.API.Infrastructure.Context;
 global using Orchestration.StockService.API.Infrastructure.Entities;
+global using Shared.Orchestration;
 global using System.Reflection;
