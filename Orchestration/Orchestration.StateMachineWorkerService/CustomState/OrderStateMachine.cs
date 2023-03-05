@@ -10,12 +10,13 @@
         public Event<IOrchestrationStockReservedEvent> StockReservedEvent { get; set; }
         public Event<IOrchestrationStockNotReservedEvent> StockNotReservedEvent { get; set; }
         public Event<IOrchestrationPaymentCompletedEvent> PaymentCompletedEvent { get; set; }
-
+        public Event<IOrchestrationPaymentFailedEvent> PaymentFailedEvent { get; set; }
 
         public State OrderCreated { get; set; }
         public State StockReserved { get; set; }
         public State StockNotReserved { get; set; }
         public State PaymentCompleted { get; set; }
+        public State PaymentFailed { get; set; }
 
         public OrderStateMachine()
         {
@@ -118,14 +119,28 @@
            );
 
           During(StockReserved,
+               //1.Seçenek
                When(PaymentCompletedEvent)
-              .Publish(context => new OrchestrationOrderRequestCompletedEvent(context.Saga.OrderId))
-              .TransitionTo(PaymentCompleted)
-              .Then(context =>
-              {
-                  Console.WriteLine($"PaymentCompletedEvent After : {context.Message}");
-              })
+                  .Publish(context => new OrchestrationOrderRequestCompletedEvent(context.Saga.OrderId))
+                  .TransitionTo(PaymentCompleted)
+                  .Then(context =>
+                  {
+                      Console.WriteLine($"PaymentCompletedEvent After : {context.Message}");
+                  })
+                  .Finalize(),
+               //2.Seçenek
+               When(PaymentFailedEvent)
+                  .Publish(context => new OrchestrationOrderRequestFailedEvent(context.Saga.OrderId, context.Message.Reason))
+                  .Send(new Uri($"queue:{RabbitQueueName.StockRollBackMessageQueueName}"), context => new StockRollbackMessage(context.Message.OrderItems))
+                  .TransitionTo(PaymentFailed)
+                  .Then(context =>
+                  {
+                      Console.WriteLine($"PaymentFailedEvent After : {context.Message}");
+                  })
            );
-        }
+
+          SetCompletedWhenFinalized(); //State'i final olarak biten işleri veri tabanından siler.
+
+        } 
     }
 }

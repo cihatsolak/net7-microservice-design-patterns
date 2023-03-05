@@ -12,6 +12,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddMassTransit(busRegistrationConfigurator =>
 {
     busRegistrationConfigurator.AddConsumer<OrderCreatedEventConsumer>();
+    busRegistrationConfigurator.AddConsumer<StockRollBackMessageConsumer>();
 
     busRegistrationConfigurator.UsingRabbitMq((busRegistrationContext, rabbitMqBusFactoryConfigurator) =>
     {
@@ -24,6 +25,11 @@ builder.Services.AddMassTransit(busRegistrationConfigurator =>
         rabbitMqBusFactoryConfigurator.ReceiveEndpoint(RabbitQueueName.StockOrderCreatedEventQueueName, configure =>
         {
             configure.ConfigureConsumer<OrderCreatedEventConsumer>(busRegistrationContext);
+        });
+
+        rabbitMqBusFactoryConfigurator.ReceiveEndpoint(RabbitQueueName.StockRollBackMessageQueueName, configure =>
+        {
+            configure.ConfigureConsumer<StockRollBackMessageConsumer>(busRegistrationContext);
         });
     });
 });
