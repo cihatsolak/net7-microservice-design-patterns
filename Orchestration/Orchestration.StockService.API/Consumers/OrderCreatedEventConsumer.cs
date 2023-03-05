@@ -1,38 +1,32 @@
-﻿namespace Choreography.StockService.API.Consumers
+﻿namespace Orchestration.StockService.API.Consumers
 {
-    public class OrderCreatedEventConsumer : IConsumer<OrderCreatedEvent>
+    public class OrderCreatedEventConsumer : IConsumer<IOrchestrationOrderCreatedEvent>
     {
         private readonly AppDbContext _context;
         private readonly ILogger<OrderCreatedEventConsumer> _logger;
-        private readonly ISendEndpointProvider _sendEndpointProvider;
         private readonly IPublishEndpoint _publishEndpoint;
 
         public OrderCreatedEventConsumer
             (AppDbContext context,
             ILogger<OrderCreatedEventConsumer> logger,
-            ISendEndpointProvider sendEndpointProvider,
             IPublishEndpoint publishEndpoint)
         {
             _context = context;
             _logger = logger;
-            _sendEndpointProvider = sendEndpointProvider;
             _publishEndpoint = publishEndpoint;
         }
 
-        public async Task Consume(ConsumeContext<OrderCreatedEvent> context)
+        public async Task Consume(ConsumeContext<IOrchestrationOrderCreatedEvent> context)
         {
             bool stockStatus = await CheckStockOfAllProductsAsync(context);
             if (!stockStatus) // ürünlerden herhangi birinin stoğu yoksa
             {
-                StockNotReservedEvent stockNotReservedEvent = new()
+                await _publishEndpoint.Publish<IOrchestrationStockNotReservedEvent>(new OrchestrationStockNotReservedEvent(context.Message.CorrelationId)
                 {
-                    OrderId = context.Message.OrderId,
-                    Message = "Not enough stock"
-                };
+                    Reason = "Not enough stock"
+                });
 
-                await _publishEndpoint.Publish(stockNotReservedEvent);
-
-                _logger.LogInformation("Not enough stock for Buyer Id : {@buyerId}", context.Message.BuyerId);
+                _logger.LogInformation("Not enough stock for CorrelationId Id :{@correlationId}", context.Message.CorrelationId);
 
                 return;
             }
@@ -46,26 +40,21 @@
                 await _context.SaveChangesAsync();
             }
 
-            _logger.LogInformation("Stock was reserved for buyer Id :{@buyerId}", context.Message.BuyerId);
+            _logger.LogInformation("Stock was reserved for CorrelationId Id :{@correlationId}", context.Message.CorrelationId);
 
-            var sendEndpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{RabbitQueueName.StockReservedEventQueueName}"));
-
-            StockReservedEvent stockReservedEvent = new()
+            OrchestrationStockReservedEvent orchestrationStockReservedEvent = new(context.Message.CorrelationId)
             {
-                Payment = context.Message.Payment,
-                BuyerId = context.Message.BuyerId,
-                OrderId = context.Message.OrderId,
                 OrderItems = context.Message.OrderItems
             };
 
-            await sendEndpoint.Send(stockReservedEvent);
+            await _publishEndpoint.Publish<IOrchestrationStockReservedEvent>(orchestrationStockReservedEvent);
         }
 
         /// <summary>
         /// Tüm ürünlerin stoğunu kontrol eder.
         /// </summary>
         /// <returns></returns>
-        private async Task<bool> CheckStockOfAllProductsAsync(ConsumeContext<OrderCreatedEvent> context)
+        private async Task<bool> CheckStockOfAllProductsAsync(ConsumeContext<IOrchestrationOrderCreatedEvent> context)
         {
             foreach (var orderItem in context.Message.OrderItems)
             {

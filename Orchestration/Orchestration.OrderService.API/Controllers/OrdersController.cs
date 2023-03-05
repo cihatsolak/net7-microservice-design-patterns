@@ -1,4 +1,6 @@
-﻿namespace Orchestration.OrderService.API.Controllers
+﻿using Shared.Orchestration;
+
+namespace Orchestration.OrderService.API.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]

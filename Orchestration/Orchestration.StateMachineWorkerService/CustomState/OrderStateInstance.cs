@@ -1,4 +1,4 @@
-﻿namespace Orchestration.StateMachineWorkerService.State
+﻿namespace Orchestration.StateMachineWorkerService.CustomState
 {
     public class OrderStateInstance : SagaStateMachineInstance
     {
