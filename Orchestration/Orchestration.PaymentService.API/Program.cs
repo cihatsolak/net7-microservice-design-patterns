@@ -6,12 +6,19 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddMassTransit(busRegistrationConfigurator =>
 {
+    busRegistrationConfigurator.AddConsumer<StockReservedRequestPaymentConsumer>();
+
     busRegistrationConfigurator.UsingRabbitMq((busRegistrationContext, rabbitMqBusFactoryConfigurator) =>
     {
         rabbitMqBusFactoryConfigurator.Host(builder.Configuration["RabbitMqSetting:HostAddress"], "/", hostConfigurator =>
         {
             hostConfigurator.Username(builder.Configuration["RabbitMqSetting:Username"]);
             hostConfigurator.Password(builder.Configuration["RabbitMqSetting:Password"]);
+        });
+
+        rabbitMqBusFactoryConfigurator.ReceiveEndpoint(RabbitQueueName.PaymentStockReservedRequestQueueName, endpoint =>
+        {
+            endpoint.ConfigureConsumer<StockReservedRequestPaymentConsumer>(busRegistrationContext);
         });
     });
 });

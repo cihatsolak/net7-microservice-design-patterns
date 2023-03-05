@@ -11,5 +11,6 @@
 
         public const string OrderSaga = "order-saga-queue";
         public const string PaymentStockReservedRequestQueueName = "payment-stock-reserved-request-queue";
+        public const string OrderRequestCompletedEventQueueName = "order-request-completed-queue";
     }
 }

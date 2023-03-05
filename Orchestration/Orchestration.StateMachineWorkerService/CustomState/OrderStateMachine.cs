@@ -8,9 +8,11 @@
     {
         public Event<IOrderCreatedRequestEvent> OrderCreatedRequestEvent { get; set; }
         public Event<IOrchestrationStockReservedEvent> StockReservedEvent { get; set; }
-      
+        public Event<IOrchestrationPaymentCompletedEvent> PaymentCompletedEvent { get; set; }
+
         public State OrderCreated { get; set; }
         public State StockReserved { get; set; }
+        public State PaymentCompleted { get; set; }
 
         public OrderStateMachine()
         {
@@ -22,10 +24,23 @@
                 //veri tabanındaki order ile event'den gelen order id'yi karşılaştır. Eğer var ise herhangi birşey yapma. Eğer yok ise yeni bir satır oluştur. Oluşturmuş olduğun bu order state instance satırını da correlation id'sine random bir değer ata.
                 //aynı order id'ye sahip event fırlatılırsa, veri tabanında yeni bir satır oluşmaz. (aşağıdaki kontrolle beraber)
                 eventCorrelationConfigurator.CorrelateBy<int>(database => database.OrderId, @event => @event.Message.OrderId).SelectId(selector => Guid.NewGuid());
+            });
 
-                //Initial evresinden order created evresine geçerken bunu açıkca belirtmek gereklidir.
-                //Initial aşamasındayken, eğerki OrderCreatedRequestEvent event'i geldiyse, Then metoduyla birlikte şunu yap demek.
-                Initially(
+            Event(() => StockReservedEvent, eventCorrelationConfigurator =>
+            {
+                //StockReservedEvent eventi fırlatıldığında hangi correlationId'ye sahip satırın state'ini değiştirecek? burada belirtiyoruz.
+                eventCorrelationConfigurator.CorrelateById(context => context.Message.CorrelationId);
+            });
+
+            Event(() => PaymentCompletedEvent, eventCorrelationConfigurator =>
+            {
+                //StockReservedRequestPaymentEvent eventi fırlatıldığında hangi correlationId'ye sahip satırın state'ini değiştirecek? burada belirtiyoruz.
+                eventCorrelationConfigurator.CorrelateById(context => context.Message.CorrelationId);
+            });
+
+            //Initial evresinden order created evresine geçerken bunu açıkca belirtmek gereklidir.
+            //Initial aşamasındayken, eğerki OrderCreatedRequestEvent event'i geldiyse, Then metoduyla birlikte şunu yap demek.
+            Initially(
                  When(OrderCreatedRequestEvent)
                 .Then(context =>
                 {
@@ -33,7 +48,7 @@
                     // context.Message: Event'den gelen datayı temsil eder.
 
                     context.Saga.BuyerId = context.Message.BuyerId;
-                    
+
                     context.Saga.OrderId = context.Message.OrderId;
                     context.Saga.CreatedDate = DateTime.Now;
 
@@ -55,13 +70,12 @@
                 .Then(context =>
                 {
                     Console.WriteLine($"OrderCreatedRequestEvent After : {context.Saga}");
-                }));
-            });
+                })
+            );
 
             //OrderCreated state'indeyken, OrderCreated evresindeyken
             During(OrderCreated,
                 When(StockReservedEvent)
-                .TransitionTo(StockReserved)
                 .Send(new Uri($"queue:{RabbitQueueName.PaymentStockReservedRequestQueueName}"), context => new OrchestrationStockReservedRequestPayment(context.Message.CorrelationId)
                 {
                     //context.Message: StockReservedEvent'i tesmil eder
@@ -75,13 +89,25 @@
                         CVV = context.Saga.CVV,
                         Expiration = context.Saga.Expiration,
                         TotalPrice = context.Saga.TotalPrice
-                    }
+                    },
+                    BuyerId = context.Saga.BuyerId
                 })
+                .TransitionTo(StockReserved)
                 .Then(context =>
                 {
                     Console.WriteLine($"StockReservedEvent After : {context.Saga}");
                 })
-            ); 
+           );
+
+          During(StockReserved,
+               When(PaymentCompletedEvent)
+              .Publish(context => new OrchestrationOrderRequestCompletedEvent(context.Saga.OrderId))
+              .TransitionTo(PaymentCompleted)
+              .Then(context =>
+              {
+                  Console.WriteLine($"PaymentCompletedEvent After : {context.Message}");
+              })
+           );
         }
     }
 }
