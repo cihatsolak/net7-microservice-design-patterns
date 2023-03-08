@@ -1,6 +1,6 @@
 ﻿namespace EventSourcing.API.Models
 {
-    public class CreateProductResponse
+    public class CreateProductDto
     {
         public int UserId { get; set; }
         public string Name { get; set; }
