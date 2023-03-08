@@ -3,5 +3,15 @@
     public class CreateProductCommand : IRequest
     {
         public CreateProductDto CreateProductDto { get; set; }
+
+        public CreateProductCommand()
+        {
+        }
+
+        public CreateProductCommand(CreateProductDto createProductDto)
+        {
+            CreateProductDto = createProductDto;
+        }
+        
     }
 }
