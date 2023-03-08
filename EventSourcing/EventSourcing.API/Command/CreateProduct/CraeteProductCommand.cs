@@ -1,4 +1,4 @@
-﻿namespace EventSourcing.API.Command
+﻿namespace EventSourcing.API.Command.CreateProduct
 {
     public class CreateProductCommand : IRequest
     {

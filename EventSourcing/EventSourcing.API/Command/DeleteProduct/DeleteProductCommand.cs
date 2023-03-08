@@ -1,4 +1,4 @@
-﻿namespace EventSourcing.API.Command
+﻿namespace EventSourcing.API.Command.DeleteProduct
 {
     public class DeleteProductCommand : IRequest
     {
