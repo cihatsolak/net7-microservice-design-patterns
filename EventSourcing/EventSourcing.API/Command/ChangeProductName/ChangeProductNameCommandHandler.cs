@@ -2,9 +2,18 @@
 {
     public class ChangeProductNameCommandHandler : IRequestHandler<ChangeProductNameCommand>
     {
-        public Task Handle(ChangeProductNameCommand request, CancellationToken cancellationToken)
+        private readonly ProductStream _productStream;
+
+        public ChangeProductNameCommandHandler(ProductStream productStream)
         {
-            throw new NotImplementedException();
+            _productStream = productStream;
+        }
+
+        public async Task Handle(ChangeProductNameCommand request, CancellationToken cancellationToken)
+        {
+            _productStream.NameChanged(request.ChangeProductNameDto);
+
+            await _productStream.SaveAsync();
         }
     }
 }
