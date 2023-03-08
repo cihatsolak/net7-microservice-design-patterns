@@ -4,6 +4,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 await builder.Services.AddEventStoreAsync(builder.Configuration);
+builder.Services.AddSingleton<ProductStream>();
 
 var app = builder.Build();
 
