@@ -1,4 +1,5 @@
 ﻿global using EventSourcing.API.Models;
+global using EventSourcing.API.Store;
 global using EventSourcing.Shared.Events;
 global using EventStore.ClientAPI;
 global using MediatR;
