@@ -11,6 +11,12 @@
             _mediator = mediator;
         }
 
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetAllListByUserId(int userId)
+        {
+            return Ok(await _mediator.Send(new GetProductsByUserIdQuery(userId)));
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create(CreateProductDto createProductDto)
         {

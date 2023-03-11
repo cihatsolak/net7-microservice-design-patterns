@@ -5,6 +5,7 @@ global using EventSourcing.API.Command.CreateProduct;
 global using EventSourcing.API.Command.DeleteProduct;
 global using EventSourcing.API.Infrastructure;
 global using EventSourcing.API.Models;
+global using EventSourcing.API.Queries;
 global using EventSourcing.API.Store;
 global using EventSourcing.Shared.Events;
 global using EventStore.ClientAPI;
