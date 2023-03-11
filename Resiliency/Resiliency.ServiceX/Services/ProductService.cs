@@ -11,11 +11,12 @@
             _logger = logger;
         }
 
-        public async Task<Product> GetProduct(int id)
+        public async Task<Product> GetProductByIdAsync(int id)
         {
             var product = await _client.GetFromJsonAsync<Product>($"{id}");
 
-            _logger.LogInformation($"Products:{product.Id}-{product.Name}");
+            _logger.LogInformation("products:{@id}-{@name}", product.Id, product.Name);
+
             return product;
         }
     }
