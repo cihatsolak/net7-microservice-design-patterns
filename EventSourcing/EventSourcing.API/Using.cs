@@ -1,4 +1,5 @@
-﻿global using EventSourcing.API.Command.ChangeProductName;
+﻿global using EventSourcing.API.BackgroundServices;
+global using EventSourcing.API.Command.ChangeProductName;
 global using EventSourcing.API.Command.ChangeProductPrice;
 global using EventSourcing.API.Command.CreateProduct;
 global using EventSourcing.API.Command.DeleteProduct;

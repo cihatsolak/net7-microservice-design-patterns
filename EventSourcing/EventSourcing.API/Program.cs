@@ -14,6 +14,8 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Progr
 await builder.Services.AddEventStoreAsync(builder.Configuration);
 builder.Services.AddSingleton<ProductStream>();
 
+builder.Services.AddHostedService<ProductReadDatabaseEventStore>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
