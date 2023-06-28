@@ -2,22 +2,22 @@
 {
     public class OrderRequestCompletedEventConsumer : IConsumer<IOrchestrationOrderRequestCompletedEvent>
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _dbContext;
         private readonly ILogger<OrderRequestCompletedEventConsumer> _logger;
 
-        public OrderRequestCompletedEventConsumer(AppDbContext context, ILogger<OrderRequestCompletedEventConsumer> logger)
+        public OrderRequestCompletedEventConsumer(AppDbContext dbContext, ILogger<OrderRequestCompletedEventConsumer> logger)
         {
-            _context = context;
+            _dbContext = dbContext;
             _logger = logger;
         }
 
         public async Task Consume(ConsumeContext<IOrchestrationOrderRequestCompletedEvent> context)
         {
-            var order = await _context.Orders.FindAsync(context.Message.OrderId);
+            var order = await _dbContext.Orders.FindAsync(context.Message.OrderId);
             if (order is not null)
             {
                 order.Status = OrderStatus.Completed;
-                await _context.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
 
                 _logger.LogInformation($"Order (Id={context.Message.OrderId}) status changed : {order.Status}");
             }

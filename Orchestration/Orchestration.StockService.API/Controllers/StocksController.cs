@@ -4,17 +4,17 @@
     [ApiController]
     public class StocksController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _dbContext;
 
-        public StocksController(AppDbContext context)
+        public StocksController(AppDbContext dbContext)
         {
-            _context = context;
+            _dbContext = dbContext;
         }
 
         [HttpGet]
         public async Task<IActionResult> All(CancellationToken cancellationToken)
         {
-            var stocks = await _context.Stocks.ToListAsync(cancellationToken);
+            var stocks = await _dbContext.Stocks.ToListAsync(cancellationToken);
             if (!stocks.Any())
             {
                 return NotFound();

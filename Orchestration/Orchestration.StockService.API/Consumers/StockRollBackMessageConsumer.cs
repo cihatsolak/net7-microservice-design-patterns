@@ -2,12 +2,12 @@
 {
     public class StockRollBackMessageConsumer : IConsumer<IOrchestrationStockRollBackMessage>
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _dbContext;
         private readonly ILogger<StockRollBackMessageConsumer> _logger;
 
-        public StockRollBackMessageConsumer(AppDbContext context, ILogger<StockRollBackMessageConsumer> logger)
+        public StockRollBackMessageConsumer(AppDbContext dbContext, ILogger<StockRollBackMessageConsumer> logger)
         {
-            _context = context;
+            _dbContext = dbContext;
             _logger = logger;
         }
 
@@ -15,12 +15,12 @@
         {
             foreach (var item in context.Message.OrderItems)
             {
-                var stock = await _context.Stocks.FirstOrDefaultAsync(x => x.ProductId == item.ProductId);
+                var stock = await _dbContext.Stocks.FirstOrDefaultAsync(x => x.ProductId == item.ProductId);
 
                 if (stock != null)
                 {
                     stock.Count += item.Count;
-                    await _context.SaveChangesAsync();
+                    await _dbContext.SaveChangesAsync();
                 }
             }
 

@@ -2,16 +2,16 @@
 {
     public class OrderCreatedEventConsumer : IConsumer<IOrchestrationOrderCreatedEvent>
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _dbContext;
         private readonly ILogger<OrderCreatedEventConsumer> _logger;
         private readonly IPublishEndpoint _publishEndpoint;
 
         public OrderCreatedEventConsumer
-            (AppDbContext context,
+            (AppDbContext dbContext,
             ILogger<OrderCreatedEventConsumer> logger,
             IPublishEndpoint publishEndpoint)
         {
-            _context = context;
+            _dbContext = dbContext;
             _logger = logger;
             _publishEndpoint = publishEndpoint;
         }
@@ -33,11 +33,11 @@
 
             foreach (var orderItem in context.Message.OrderItems)
             {
-                var stock = await _context.Stocks.FirstOrDefaultAsync(x => x.ProductId == orderItem.ProductId);
+                var stock = await _dbContext.Stocks.FirstOrDefaultAsync(x => x.ProductId == orderItem.ProductId);
 
                 stock.Count -= orderItem.Count;
 
-                await _context.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
             }
 
             _logger.LogInformation("Stock was reserved for CorrelationId Id :{@correlationId}", context.Message.CorrelationId);
@@ -58,7 +58,7 @@
         {
             foreach (var orderItem in context.Message.OrderItems)
             {
-                bool isHasStock = await _context.Stocks.AnyAsync(x => x.ProductId == orderItem.ProductId && x.Count > orderItem.Count);
+                bool isHasStock = await _dbContext.Stocks.AnyAsync(x => x.ProductId == orderItem.ProductId && x.Count > orderItem.Count);
                 if (!isHasStock)
                 {
                     return isHasStock; //herhangi bir üründe stok yoksa işlemi bitir.

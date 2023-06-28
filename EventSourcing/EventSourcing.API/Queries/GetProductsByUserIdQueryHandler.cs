@@ -2,16 +2,16 @@
 {
     public class GetProductsByUserIdQueryHandler : IRequestHandler<GetProductsByUserIdQuery, List<ProductDto>>
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _dbContext;
 
-        public GetProductsByUserIdQueryHandler(AppDbContext context)
+        public GetProductsByUserIdQueryHandler(AppDbContext dbContext)
         {
-            _context = context;
+            _dbContext = dbContext;
         }
 
         public async Task<List<ProductDto>> Handle(GetProductsByUserIdQuery request, CancellationToken cancellationToken)
         {   
-            var products = await _context.Products
+            var products = await _dbContext.Products
                 .Where(product => product.UserId == request.UserId)
                 .Select(product => new ProductDto
                 {

@@ -2,14 +2,14 @@
 {
     public class PaymentFailedEventConsumer : IConsumer<PaymentFailedEvent>
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _dbContext;
         private readonly ILogger<PaymentFailedEventConsumer> _logger;
 
         public PaymentFailedEventConsumer(
-            AppDbContext context,
+            AppDbContext dbContext,
             ILogger<PaymentFailedEventConsumer> logger)
         {
-            _context = context;
+            _dbContext = dbContext;
             _logger = logger;
         }
 
@@ -17,11 +17,11 @@
         {
             foreach (var item in context.Message.OrderItems)
             {
-                var stock = await _context.Stocks.FirstOrDefaultAsync(x => x.ProductId == item.ProductId);
+                var stock = await _dbContext.Stocks.FirstOrDefaultAsync(x => x.ProductId == item.ProductId);
                 if (stock is not null)
                 {
                     stock.Count += item.Count;
-                    await _context.SaveChangesAsync();
+                    await _dbContext.SaveChangesAsync();
                 }
             }
 
