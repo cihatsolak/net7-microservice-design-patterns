@@ -4,14 +4,14 @@
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _dbContext;
         private readonly IPublishEndpoint _publishEndpoint;
 
         public OrdersController(
-            AppDbContext context,
+            AppDbContext dbContext,
             IPublishEndpoint publishEndpoint)
         {
-            _context = context;
+            _dbContext = dbContext;
             _publishEndpoint = publishEndpoint;
         }
 
@@ -73,8 +73,8 @@
                 });
             });
 
-            await _context.AddAsync(order);
-            await _context.SaveChangesAsync();
+            await _dbContext.AddAsync(order);
+            await _dbContext.SaveChangesAsync();
 
             return order;
         }

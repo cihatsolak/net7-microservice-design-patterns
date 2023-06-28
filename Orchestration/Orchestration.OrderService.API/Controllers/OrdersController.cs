@@ -6,14 +6,14 @@ namespace Orchestration.OrderService.API.Controllers
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _dbContext;
         private readonly ISendEndpointProvider _sendEndpointProvider;
 
         public OrdersController(
-            AppDbContext context,
+            AppDbContext dbContext,
             ISendEndpointProvider sendEndpointProvider)
         {
-            _context = context;
+            _dbContext = dbContext;
             _sendEndpointProvider = sendEndpointProvider;
         }
 
@@ -76,8 +76,8 @@ namespace Orchestration.OrderService.API.Controllers
                 });
             });
 
-            await _context.AddAsync(order);
-            await _context.SaveChangesAsync();
+            await _dbContext.AddAsync(order);
+            await _dbContext.SaveChangesAsync();
 
             return order;
         }
