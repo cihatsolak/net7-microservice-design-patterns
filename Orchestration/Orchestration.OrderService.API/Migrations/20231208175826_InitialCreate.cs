@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace OrderService.API.Migrations
+namespace Orchestration.OrderService.API.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,6 +24,7 @@ namespace OrderService.API.Migrations
                     BuyerId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    FailMessage = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address_Line = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
                     Address_Province = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
                     Address_District = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true)

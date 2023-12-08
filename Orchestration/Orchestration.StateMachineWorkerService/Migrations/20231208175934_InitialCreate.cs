@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Orchestration.StateMachineWorkerService.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialSagaDbContext : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

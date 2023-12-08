@@ -2,7 +2,7 @@
 {
     public class OrderStateInstance : SagaStateMachineInstance
     {
-        public Guid CorrelationId { get; set; }
+        public Guid CorrelationId { get; set; } //SagaStateMachineInstance interface araacılığıyla geliyor
 
         public string CurrentState { get; set; }
         public string BuyerId { get; set; }

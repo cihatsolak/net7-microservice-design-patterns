@@ -9,11 +9,11 @@ using Orchestration.OrderService.API.Infrastructure.Context;
 
 #nullable disable
 
-namespace OrderService.API.Migrations
+namespace Orchestration.OrderService.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230228205607_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20231208175826_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace OrderService.API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("OrderService.API.Infrastructure.Data.Entities.Order", b =>
+            modelBuilder.Entity("Orchestration.OrderService.API.Infrastructure.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -41,6 +41,9 @@ namespace OrderService.API.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
 
+                    b.Property<string>("FailMessage")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -49,7 +52,7 @@ namespace OrderService.API.Migrations
                     b.ToTable("Order", "dbo");
                 });
 
-            modelBuilder.Entity("OrderService.API.Infrastructure.Data.Entities.OrderItem", b =>
+            modelBuilder.Entity("Orchestration.OrderService.API.Infrastructure.Entities.OrderItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -76,9 +79,9 @@ namespace OrderService.API.Migrations
                     b.ToTable("OrderItem", "dbo");
                 });
 
-            modelBuilder.Entity("OrderService.API.Infrastructure.Data.Entities.Order", b =>
+            modelBuilder.Entity("Orchestration.OrderService.API.Infrastructure.Entities.Order", b =>
                 {
-                    b.OwnsOne("OrderService.API.Infrastructure.Data.Entities.Address", "Address", b1 =>
+                    b.OwnsOne("Orchestration.OrderService.API.Infrastructure.Entities.Address", "Address", b1 =>
                         {
                             b1.Property<int>("OrderId")
                                 .HasColumnType("int");
@@ -109,10 +112,10 @@ namespace OrderService.API.Migrations
                     b.Navigation("Address");
                 });
 
-            modelBuilder.Entity("OrderService.API.Infrastructure.Data.Entities.OrderItem", b =>
+            modelBuilder.Entity("Orchestration.OrderService.API.Infrastructure.Entities.OrderItem", b =>
                 {
-                    b.HasOne("OrderService.API.Infrastructure.Data.Entities.Order", "Order")
-                        .WithMany("OrderItems")
+                    b.HasOne("Orchestration.OrderService.API.Infrastructure.Entities.Order", "Order")
+                        .WithMany("Items")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -120,9 +123,9 @@ namespace OrderService.API.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("OrderService.API.Infrastructure.Data.Entities.Order", b =>
+            modelBuilder.Entity("Orchestration.OrderService.API.Infrastructure.Entities.Order", b =>
                 {
-                    b.Navigation("OrderItems");
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

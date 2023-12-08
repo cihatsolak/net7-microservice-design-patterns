@@ -12,8 +12,8 @@ using Orchestration.StateMachineWorkerService.Data;
 namespace Orchestration.StateMachineWorkerService.Migrations
 {
     [DbContext(typeof(OrderStateDbContext))]
-    [Migration("20230304104848_InitialSagaDbContext")]
-    partial class InitialSagaDbContext
+    [Migration("20231208175934_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -8,7 +8,7 @@ using Orchestration.OrderService.API.Infrastructure.Context;
 
 #nullable disable
 
-namespace OrderService.API.Migrations
+namespace Orchestration.OrderService.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -22,7 +22,7 @@ namespace OrderService.API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("OrderService.API.Infrastructure.Entities.Order", b =>
+            modelBuilder.Entity("Orchestration.OrderService.API.Infrastructure.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -49,7 +49,7 @@ namespace OrderService.API.Migrations
                     b.ToTable("Order", "dbo");
                 });
 
-            modelBuilder.Entity("OrderService.API.Infrastructure.Entities.OrderItem", b =>
+            modelBuilder.Entity("Orchestration.OrderService.API.Infrastructure.Entities.OrderItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -76,9 +76,9 @@ namespace OrderService.API.Migrations
                     b.ToTable("OrderItem", "dbo");
                 });
 
-            modelBuilder.Entity("OrderService.API.Infrastructure.Entities.Order", b =>
+            modelBuilder.Entity("Orchestration.OrderService.API.Infrastructure.Entities.Order", b =>
                 {
-                    b.OwnsOne("OrderService.API.Infrastructure.Entities.Address", "Address", b1 =>
+                    b.OwnsOne("Orchestration.OrderService.API.Infrastructure.Entities.Address", "Address", b1 =>
                         {
                             b1.Property<int>("OrderId")
                                 .HasColumnType("int");
@@ -109,9 +109,9 @@ namespace OrderService.API.Migrations
                     b.Navigation("Address");
                 });
 
-            modelBuilder.Entity("OrderService.API.Infrastructure.Entities.OrderItem", b =>
+            modelBuilder.Entity("Orchestration.OrderService.API.Infrastructure.Entities.OrderItem", b =>
                 {
-                    b.HasOne("OrderService.API.Infrastructure.Entities.Order", "Order")
+                    b.HasOne("Orchestration.OrderService.API.Infrastructure.Entities.Order", "Order")
                         .WithMany("Items")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -120,7 +120,7 @@ namespace OrderService.API.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("OrderService.API.Infrastructure.Entities.Order", b =>
+            modelBuilder.Entity("Orchestration.OrderService.API.Infrastructure.Entities.Order", b =>
                 {
                     b.Navigation("Items");
                 });
