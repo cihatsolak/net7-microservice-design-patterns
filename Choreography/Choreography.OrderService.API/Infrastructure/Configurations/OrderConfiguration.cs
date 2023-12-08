@@ -11,7 +11,9 @@
             builder.Property(p => p.CreatedDate).ValueGeneratedOnAdd().HasDefaultValueSql("getdate()").IsRequired();
             builder.Property(p => p.Status).IsRequired();
 
-            builder.OwnsOne(p => p.Address, navigationBuilder =>
+            //adres diye ayrı bir tablo olmasını istemiyorum, order tablosunun içerisinde olsun istiyorum.
+            //order tablosunun içerisinde Address_Line, Address_Province olarak kolonlar eklenecek.
+            builder.OwnsOne(p => p.Address, navigationBuilder => 
             {
                 navigationBuilder.Property(p => p.Line).HasMaxLength(50).IsUnicode(false);
                 navigationBuilder.Property(p => p.Province).HasMaxLength(50).IsUnicode(false);

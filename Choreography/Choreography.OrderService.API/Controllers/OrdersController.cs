@@ -1,82 +1,81 @@
-﻿namespace Choreography.OrderService.API.Controllers
+﻿namespace Choreography.OrderService.API.Controllers;
+
+[Route("api/[controller]/[action]")]
+[ApiController]
+public class OrdersController : ControllerBase
 {
-    [Route("api/[controller]/[action]")]
-    [ApiController]
-    public class OrdersController : ControllerBase
+    private readonly AppDbContext _context;
+    private readonly IPublishEndpoint _publishEndpoint;
+
+    public OrdersController(
+        AppDbContext context,
+        IPublishEndpoint publishEndpoint)
     {
-        private readonly AppDbContext _context;
-        private readonly IPublishEndpoint _publishEndpoint;
+        _context = context;
+        _publishEndpoint = publishEndpoint;
+    }
 
-        public OrdersController(
-            AppDbContext context,
-            IPublishEndpoint publishEndpoint)
+    [HttpPost]
+    public async Task<IActionResult> Create(OrderCreateRequest request)
+    {
+        var order = await AddOrderAsync(request);
+
+        OrderCreatedEvent orderCreatedEvent = new()
         {
-            _context = context;
-            _publishEndpoint = publishEndpoint;
-        }
+            BuyerId = request.BuyerId,
+            OrderId = order.Id,
+            Payment = new PaymentMessage
+            {
+                CardName = request.Payment.CardName,
+                CardNumber = request.Payment.CardNumber,
+                Expiration = request.Payment.Expiration,
+                CVV = request.Payment.CVV,
+                TotalPrice = request.OrderItems.Sum(x => x.Price * x.Count)
+            },
+        };
 
-        [HttpPost]
-        public async Task<IActionResult> Create(OrderCreateRequest request)
+        request.OrderItems.ForEach(item =>
         {
-            var order = await AddOrderAsync(request);
-
-            OrderCreatedEvent orderCreatedEvent = new()
+            orderCreatedEvent.OrderItems.Add(new OrderItemMessage
             {
-                BuyerId = request.BuyerId,
-                OrderId = order.Id,
-                Payment = new PaymentMessage
-                {
-                    CardName = request.Payment.CardName,
-                    CardNumber = request.Payment.CardNumber,
-                    Expiration = request.Payment.Expiration,
-                    CVV = request.Payment.CVV,
-                    TotalPrice = request.OrderItems.Sum(x => x.Price * x.Count)
-                },
-            };
-
-            request.OrderItems.ForEach(item =>
-            {
-                orderCreatedEvent.OrderItems.Add(new OrderItemMessage
-                {
-                    Count = item.Count,
-                    ProductId = item.ProductId
-                });
+                Count = item.Count,
+                ProductId = item.ProductId
             });
+        });
 
-            await _publishEndpoint.Publish(orderCreatedEvent);
+        await _publishEndpoint.Publish(orderCreatedEvent);
 
-            return Ok();
-        }
+        return Ok();
+    }
 
-        private async Task<Order> AddOrderAsync(OrderCreateRequest request)
+    private async Task<Order> AddOrderAsync(OrderCreateRequest request)
+    {
+        Order order = new()
         {
-            Order order = new()
+            BuyerId = request.BuyerId,
+            Status = OrderStatus.Suspend,
+            Address = new Address
             {
-                BuyerId = request.BuyerId,
-                Status = OrderStatus.Suspend,
-                Address = new Address
-                {
-                    Line = request.Address.Line,
-                    Province = request.Address.Province,
-                    District = request.Address.District
-                },
-                CreatedDate = DateTime.Now
-            };
+                Line = request.Address.Line,
+                Province = request.Address.Province,
+                District = request.Address.District
+            },
+            CreatedDate = DateTime.Now
+        };
 
-            request.OrderItems.ForEach(requestOrderItem =>
+        request.OrderItems.ForEach(requestOrderItem =>
+        {
+            order.Items.Add(new OrderItem()
             {
-                order.Items.Add(new OrderItem()
-                {
-                    Price = requestOrderItem.Price,
-                    ProductId = requestOrderItem.ProductId,
-                    Count = requestOrderItem.Count
-                });
+                Price = requestOrderItem.Price,
+                ProductId = requestOrderItem.ProductId,
+                Count = requestOrderItem.Count
             });
+        });
 
-            await _context.AddAsync(order);
-            await _context.SaveChangesAsync();
+        await _context.AddAsync(order);
+        await _context.SaveChangesAsync();
 
-            return order;
-        }
+        return order;
     }
 }
