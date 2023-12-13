@@ -20,7 +20,7 @@
 
         public OrderStateMachine()
         {
-            InstanceState(p => p.CurrentState); // Initial State, İlk State
+            InstanceState(instance => instance.CurrentState); // Initial State, İlk State
 
             Event(() => OrderCreatedRequestEvent, eventCorrelationConfigurator =>
             {
