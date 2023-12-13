@@ -51,7 +51,7 @@
             //Initial evresinden order created evresine geçerken bunu açıkca belirtmek gereklidir.
             //Initial aşamasındayken, eğerki OrderCreatedRequestEvent event'i geldiyse, Then metoduyla birlikte şunu yap demek.
             Initially(
-                 When(OrderCreatedRequestEvent)
+                 When(OrderCreatedRequestEvent) //OrderCreatedRequestEvent fırlatıldığında
                 .Then(context =>
                 {
                     // context.Saga: veri tabanına kaydedilecek olan satırı temsil eder.
@@ -131,7 +131,7 @@
                //2.Seçenek
                When(PaymentFailedEvent)
                   .Publish(context => new OrchestrationOrderRequestFailedEvent(context.Saga.OrderId, context.Message.Reason))
-                  .Send(new Uri($"queue:{RabbitQueueName.StockRollBackMessageQueueName}"), context => new StockRollbackMessage(context.Message.OrderItems))
+                  .Send(new Uri($"queue:{RabbitQueueName.StockRollBackMessageQueueName}"), context => new OrchestrationStockRollBackMessage(context.Message.OrderItems))
                   .TransitionTo(PaymentFailed)
                   .Then(context =>
                   {

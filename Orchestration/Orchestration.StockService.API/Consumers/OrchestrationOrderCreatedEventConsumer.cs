@@ -1,14 +1,14 @@
 ﻿namespace Orchestration.StockService.API.Consumers
 {
-    public class OrderCreatedEventConsumer : IConsumer<IOrchestrationOrderCreatedEvent>
+    public class OrchestrationOrderCreatedEventConsumer : IConsumer<IOrchestrationOrderCreatedEvent>
     {
         private readonly AppDbContext _context;
-        private readonly ILogger<OrderCreatedEventConsumer> _logger;
+        private readonly ILogger<OrchestrationOrderCreatedEventConsumer> _logger;
         private readonly IPublishEndpoint _publishEndpoint;
 
-        public OrderCreatedEventConsumer
+        public OrchestrationOrderCreatedEventConsumer
             (AppDbContext context,
-            ILogger<OrderCreatedEventConsumer> logger,
+            ILogger<OrchestrationOrderCreatedEventConsumer> logger,
             IPublishEndpoint publishEndpoint)
         {
             _context = context;

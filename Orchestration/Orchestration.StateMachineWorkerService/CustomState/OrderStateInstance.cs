@@ -2,6 +2,8 @@
 {
     public class OrderStateInstance : SagaStateMachineInstance
     {
+        //her bir satır için random correlation id üretilir.
+        //state machine'in stateleri birbirinden ayırması için kullanılır.
         public Guid CorrelationId { get; set; } //SagaStateMachineInstance interface araacılığıyla geliyor
 
         public string CurrentState { get; set; }

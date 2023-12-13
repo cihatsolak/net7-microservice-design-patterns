@@ -1,17 +1,17 @@
 ﻿namespace Orchestration.StockService.API.Consumers
 {
-    public class StockRollBackMessageConsumer : IConsumer<IOrchestrationStockRollBackMessage>
+    public class OrchestrationStockRollBackMessageConsumer : IConsumer<OrchestrationStockRollBackMessage>
     {
         private readonly AppDbContext _context;
-        private readonly ILogger<StockRollBackMessageConsumer> _logger;
+        private readonly ILogger<OrchestrationStockRollBackMessageConsumer> _logger;
 
-        public StockRollBackMessageConsumer(AppDbContext context, ILogger<StockRollBackMessageConsumer> logger)
+        public OrchestrationStockRollBackMessageConsumer(AppDbContext context, ILogger<OrchestrationStockRollBackMessageConsumer> logger)
         {
             _context = context;
             _logger = logger;
         }
 
-        public async Task Consume(ConsumeContext<IOrchestrationStockRollBackMessage> context)
+        public async Task Consume(ConsumeContext<OrchestrationStockRollBackMessage> context)
         {
             foreach (var item in context.Message.OrderItems)
             {

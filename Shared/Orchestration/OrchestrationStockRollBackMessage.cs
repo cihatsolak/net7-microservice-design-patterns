@@ -5,9 +5,9 @@
         List<OrderItemMessage> OrderItems { get; set; }
     }
 
-    public class StockRollbackMessage : IOrchestrationStockRollBackMessage
+    public class OrchestrationStockRollBackMessage : IOrchestrationStockRollBackMessage
     {
-        public StockRollbackMessage(List<OrderItemMessage> orderItems)
+        public OrchestrationStockRollBackMessage(List<OrderItemMessage> orderItems)
         {
             OrderItems = orderItems;
         }
