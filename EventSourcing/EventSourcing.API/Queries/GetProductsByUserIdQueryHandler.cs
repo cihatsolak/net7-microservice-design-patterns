@@ -1,29 +1,38 @@
-﻿namespace EventSourcing.API.Queries
+﻿namespace EventSourcing.API.Queries;
+
+public class GetProductsByUserIdQuery : IRequest<List<ProductDto>>
 {
-    public class GetProductsByUserIdQueryHandler : IRequestHandler<GetProductsByUserIdQuery, List<ProductDto>>
+    public GetProductsByUserIdQuery(int userId)
     {
-        private readonly AppDbContext _context;
+        UserId = userId;
+    }
 
-        public GetProductsByUserIdQueryHandler(AppDbContext context)
-        {
-            _context = context;
-        }
+    public int UserId { get; set; }
+}
 
-        public async Task<List<ProductDto>> Handle(GetProductsByUserIdQuery request, CancellationToken cancellationToken)
-        {   
-            var products = await _context.Products
-                .Where(product => product.UserId == request.UserId)
-                .Select(product => new ProductDto
-                {
-                    Id = product.Id,
-                    UserId = product.UserId,
-                    Name = product.Name,
-                    Price = product.Price,
-                    Stock = product.Stock
-                })
-                .ToListAsync(cancellationToken);
+public class GetProductsByUserIdQueryHandler : IRequestHandler<GetProductsByUserIdQuery, List<ProductDto>>
+{
+    private readonly AppDbContext _context;
 
-            return products;
-        }
+    public GetProductsByUserIdQueryHandler(AppDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<List<ProductDto>> Handle(GetProductsByUserIdQuery request, CancellationToken cancellationToken)
+    {   
+        var products = await _context.Products
+            .Where(product => product.UserId == request.UserId)
+            .Select(product => new ProductDto
+            {
+                Id = product.Id,
+                UserId = product.UserId,
+                Name = product.Name,
+                Price = product.Price,
+                Stock = product.Stock
+            })
+            .ToListAsync(cancellationToken);
+
+        return products;
     }
 }

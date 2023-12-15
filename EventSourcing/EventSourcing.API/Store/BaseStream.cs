@@ -1,42 +1,37 @@
-﻿namespace EventSourcing.API.Store
+﻿namespace EventSourcing.API.Store;
+
+public abstract class BaseStream
 {
-    public abstract class BaseStream
+    protected readonly LinkedList<IStoredEvent> Events = new();
+
+    private readonly string _streamName;
+    private readonly EventStoreClient _eventStoreClient;
+
+    protected BaseStream(string streamName, EventStoreClient eventStoreClient)
     {
-        protected readonly LinkedList<IEvent> Events = new();
+        _streamName = streamName;
+        _eventStoreClient = eventStoreClient;
+    }
 
-        private readonly string _streamName;
-        private readonly IEventStoreConnection _eventStoreConnection;
+    public async Task SaveAsync()
+    {
+        if (!Events.Any())
+            return;
 
-        protected BaseStream(string streamName, IEventStoreConnection eventStoreConnection)
+        List<EventData> eventDataList = new();
+
+        foreach (var item in Events)
         {
-            _streamName = streamName;
-            _eventStoreConnection = eventStoreConnection;
+            Uuid eventId = Uuid.NewUuid();
+            string eventType = item.GetType().Name;
+            byte[] data = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(item, inputType: item.GetType()));
+            byte[] metaData = Encoding.UTF8.GetBytes(item.GetType().FullName);
+
+            eventDataList.Add(new EventData(eventId, eventType, data, metaData));
         }
 
-        public async Task SaveAsync()
-        {
-            if (!Events.Any())
-            {
-                await Task.CompletedTask;
-                return;
-            }
+        await _eventStoreClient.AppendToStreamAsync(_streamName, StreamState.Any, eventDataList);
 
-            List<EventData> eventDataList = new();
-
-            foreach (var item in Events)
-            {
-                Guid eventId = Guid.NewGuid();
-                string eventType = item.GetType().Name;
-                bool isJson = true;
-                byte[] data = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(item, inputType: item.GetType()));
-                byte[] metaData = Encoding.UTF8.GetBytes(item.GetType().FullName);
-
-                eventDataList.Add(new EventData(eventId, eventType, isJson, data, metaData));
-            }
-
-            await _eventStoreConnection.AppendToStreamAsync(_streamName, ExpectedVersion.Any, eventDataList);
-
-            Events.Clear();
-        }
+        Events.Clear();
     }
 }

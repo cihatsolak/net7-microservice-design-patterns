@@ -6,7 +6,7 @@
         internal const string GroupName = "agroup";
         //internal const string GroupName = "replay";
 
-        public ProductStream(IEventStoreConnection eventStoreConnection) : base(StreamName, eventStoreConnection)
+        public ProductStream(EventStoreClient eventStoreClient) : base(StreamName, eventStoreClient)
         {
         }
 

@@ -10,6 +10,12 @@
         {
             _mediator = mediator;
         }
+       
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            return Ok(await _mediator.Send(new GetProductsReadStream("ProductStream")));
+        }
 
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetAllListByUserId(int userId)

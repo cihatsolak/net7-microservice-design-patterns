@@ -8,7 +8,7 @@ global using EventSourcing.API.Models;
 global using EventSourcing.API.Queries;
 global using EventSourcing.API.Store;
 global using EventSourcing.Shared.Events;
-global using EventStore.ClientAPI;
+global using EventStore.Client;
 global using MediatR;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.EntityFrameworkCore;

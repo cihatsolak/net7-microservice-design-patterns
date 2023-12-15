@@ -1,6 +1,6 @@
 ﻿namespace EventSourcing.Shared.Events
 {
-    public interface IEvent
+    public interface IStoredEvent
     {
     }
 }

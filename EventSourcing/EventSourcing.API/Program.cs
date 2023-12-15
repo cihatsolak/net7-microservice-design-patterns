@@ -11,7 +11,8 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
-await builder.Services.AddEventStoreAsync(builder.Configuration);
+builder.Services.AddEventStoreClient(builder.Configuration.GetConnectionString("EventStore"));
+
 builder.Services.AddSingleton<ProductStream>();
 
 builder.Services.AddHostedService<ProductReadDatabaseEventStore>();

@@ -3,36 +3,41 @@
     public class ProductReadDatabaseEventStore : BackgroundService
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly IEventStoreConnection _eventStoreConnection;
+        private readonly EventStoreClient _eventStoreClient;
         private readonly ILogger<ProductReadDatabaseEventStore> _logger;
 
         public ProductReadDatabaseEventStore(
             IServiceProvider serviceProvider,
-            IEventStoreConnection eventStoreConnection,
+            EventStoreClient eventStoreClient,
             ILogger<ProductReadDatabaseEventStore> logger)
         {
-            _eventStoreConnection = eventStoreConnection;
+            _eventStoreClient = eventStoreClient;
             _logger = logger;
             _serviceProvider = serviceProvider;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            var subscription = await _eventStoreClient.SubscribeToStreamAsync(
+               ProductStream.StreamName,
+               FromStream.Start,
+               EventAppeared);
+
             //autoAck: true  --> event store message gönderdiğinde, direkt olarak mesajı gönderilmiş sayar. doğru/yanlış işlendiğiyle ilgilenmez.
             //                   EventAppeared metodu doğru çalışırsa, herhangi bir hata fırlatılmazsa mesaj gönderilmiş der. eğer metotda hata fırlatılırsa mesajı bir sonraki aşamada tekrar gönderir.
             //autoAck: false --> Event'i bana gönder, ben sana ne zaman bilgi gönderirsem o eventi gönderilmiş say.
-            await _eventStoreConnection.ConnectToPersistentSubscriptionAsync(ProductStream.StreamName, ProductStream.GroupName, EventAppeared, autoAck: false);
+            //await _eventStoreConnection.ConnectToPersistentSubscriptionAsync(ProductStream.StreamName, ProductStream.GroupName, EventAppeared, autoAck: false);
         }
 
-        private async Task EventAppeared(EventStorePersistentSubscriptionBase eventStore, ResolvedEvent resolvedEvent)
+        private async Task EventAppeared(StreamSubscription streamSubscription, ResolvedEvent resolvedEvent, CancellationToken cancellationToken)
         {
             //Metadata bilgisi ayrı bir class library'de olduğu için virgül ile konumunu belirtiyorum.
             //Tipi belirleyerek ProductCreatedEvent mı? ProductNameChangedEvent mi? olduğunu anlıyorum.
-            Type type = Type.GetType($"{Encoding.UTF8.GetString(resolvedEvent.Event.Metadata)}, EventSourcing.Shared");
+            Type type = Type.GetType($"{Encoding.UTF8.GetString(resolvedEvent.Event.Metadata.Span)}, EventSourcing.Shared");
 
             _logger.LogInformation("The Message processing... : {@type}", type);
 
-            string eventData = Encoding.UTF8.GetString(resolvedEvent.Event.Data);
+            string eventData = Encoding.UTF8.GetString(resolvedEvent.Event.Data.Span);
 
             object @event = JsonSerializer.Deserialize(eventData, type);
 
@@ -86,7 +91,7 @@
 
             await context.SaveChangesAsync();
 
-            eventStore.Acknowledge(resolvedEvent.Event.EventId);
+            //eventStore.Acknowledge(resolvedEvent.Event.EventId);
         }
     }
 }

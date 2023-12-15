@@ -1,6 +1,6 @@
 ﻿namespace EventSourcing.Shared.Events
 {
-    public class ProductCreatedEvent : IEvent
+    public class ProductCreatedEvent : IStoredEvent
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
