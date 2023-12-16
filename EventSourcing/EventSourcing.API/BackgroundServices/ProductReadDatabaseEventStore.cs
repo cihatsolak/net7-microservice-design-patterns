@@ -37,8 +37,8 @@ public class ProductReadDatabaseEventStore : BackgroundService
     public override async Task StopAsync(CancellationToken cancellationToken)
     {
         await _eventStorePersistentSubscriptionsClient.DeleteToStreamAsync(
-            ProductStream.StreamName,
-            ProductStream.GroupName,
+            ProductStream.STREAM_NAME,
+            ProductStream.REPLAY_GROUP_NAME,
             deadline: null,
             PSTREAM_USER_CREDENTIALS,
             cancellationToken);
@@ -47,8 +47,8 @@ public class ProductReadDatabaseEventStore : BackgroundService
     private async Task<PersistentSubscription> ConnectToSubscriptionAsync()
     {
         var persistentSubscription = await _eventStorePersistentSubscriptionsClient.SubscribeToStreamAsync(
-            ProductStream.StreamName,
-            ProductStream.GroupName,
+            ProductStream.STREAM_NAME,
+            ProductStream.REPLAY_GROUP_NAME,
             EventAppearedAsync,
             EventSubscriptionDropped,
             PSTREAM_USER_CREDENTIALS,

@@ -2,11 +2,11 @@
 {
     public class ProductStream : BaseStream
     {
-        internal const string StreamName = "ProductStream";
-        internal const string GroupName = "agroup";
-        //internal const string GroupName = "replay";
+        internal const string STREAM_NAME = "ProductStream";
+        internal const string A_GROUP_NAME = "agroup";
+        internal const string REPLAY_GROUP_NAME = "replay";
 
-        public ProductStream(EventStoreClient eventStoreClient) : base(StreamName, eventStoreClient)
+        public ProductStream(EventStoreClient eventStoreClient) : base(STREAM_NAME, eventStoreClient)
         {
         }
 
