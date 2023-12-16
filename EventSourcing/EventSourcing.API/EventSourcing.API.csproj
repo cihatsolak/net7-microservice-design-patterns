@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EventStore.Client.Grpc.PersistentSubscriptions" Version="23.1.0" />
     <PackageReference Include="EventStore.Client.Grpc.Streams" Version="23.1.0" />
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.3" />
